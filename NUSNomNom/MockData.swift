@@ -17,6 +17,14 @@ struct Store: Hashable, Identifiable {
 }
 
 struct MockStoreData {
+    
+    static let sampleStore = Store(
+        name: "Liang Ban Gong Fu",
+        isOpen: true,
+        cuisine: "Chinese",
+        description: "Affordable Chinese-style rice bowls with generous portions, known for their fast service and variety of proteins.",
+        location: "The Deck")
+    
     static let stores = [
         Store(
             name: "Liang Ban Gong Fu",
