@@ -9,7 +9,28 @@ import SwiftUI
 
 struct MainView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView {
+            SearchView()
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
+
+            ReviewsView()
+                .tabItem {
+                    Label("Reviews", systemImage: "text.bubble")
+                }
+
+            NavigationView()
+                .tabItem {
+                    Label("Map", systemImage: "map")
+                }
+            
+            SettingView()
+                .tabItem{
+                    Label("Settings", systemImage: "gearshape")
+                }
+        }
+        .navigationBarBackButtonHidden(false)
     }
 }
 
