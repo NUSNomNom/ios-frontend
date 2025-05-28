@@ -9,21 +9,35 @@ import SwiftUI
 
 struct SearchView: View {
     @State private var dummySearchText: String = ""
+    @State private var showFilters = false
     
     var body: some View {
         
         VStack {
             
             HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                TextField("Search food stalls...", text: $dummySearchText)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                    TextField("Search food stalls...", text: $dummySearchText)
+                }
+                .padding(10)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                
+                Button {
+                    showFilters.toggle()
+                } label: {
+                    Image(systemName: "line.3.horizontal.decrease.circle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .font(.title2)
+                        .foregroundColor(.blue)
+                }
+                .padding(10)
             }
-            .padding(10)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
             .padding()
-            
             
             NavigationStack {
                 List(MockStoreData.stores) {
@@ -52,7 +66,6 @@ struct SearchView: View {
                 }
                 .navigationTitle("All Food Stalls")
             }
-            
         }
     }
 }
