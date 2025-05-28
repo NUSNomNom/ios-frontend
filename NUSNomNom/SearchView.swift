@@ -8,8 +8,37 @@
 import SwiftUI
 
 struct SearchView: View {
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        
+        NavigationStack {
+            List(MockStoreData.stores) {
+                store in
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text(store.name)
+                            .font(.headline)
+                        Spacer()
+                        Text(store.isOpen ? "Open" : "Closed")
+                            .font(.caption)
+                            .foregroundColor(store.isOpen ? .green : .red)
+                    }
+                    
+                    Text(store.cuisine)
+                        .font(.subheadline)
+                        .fontWeight(.regular)
+                        .foregroundColor(.black)
+                    
+                    Text(store.description)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .lineLimit(3)
+                }
+                .padding(.vertical, 4)
+            }
+            .navigationTitle("All Food Stalls")
+        }
     }
 }
 
