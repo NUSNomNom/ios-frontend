@@ -10,7 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
-    @State private var isAuthenticated: Bool = false
+    @Environment(\.dismiss) var dismiss
+    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -29,7 +30,6 @@ struct LoginView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 350, height: 150)
-                    
                     
                     TextField("Email", text: $email)
                         .autocapitalization(.none)
@@ -50,24 +50,16 @@ struct LoginView: View {
                     .padding()
                     .background(Color.blue)
                     .cornerRadius(12)
-                    
-                    // Hidden Navigation Trigger
-                    NavigationLink(value: "MainView") {
-                        EmptyView()
-                    }
-                    .opacity(0)
                 }
                 .padding()
-                .navigationDestination(isPresented: $isAuthenticated) {
-                    MainView()
-                }
             }
         }
     }
 
     func login() {
         if email.lowercased() == "student@nus.edu.sg" && password == "password123" {
-            isAuthenticated = true
+            isLoggedIn = true
+            dismiss()
         }
     }
 }
