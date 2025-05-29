@@ -20,6 +20,7 @@ struct LoginView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 20) {
+                    
                     Text("Welcome to NusNomNom")
                         .foregroundColor(.white)
                         .font(.largeTitle)
@@ -52,6 +53,16 @@ struct LoginView: View {
                     .cornerRadius(12)
                 }
                 .padding()
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.white)
+                    }
+                }
             }
         }
     }
