@@ -57,6 +57,15 @@ struct LoginView: View {
                     .background(Color.blue)
                     .cornerRadius(12)
                     
+                    NavigationLink(destination: RegisterView()) {
+                        Text("Don't have an account? Register")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.orange)
+                            .cornerRadius(12)
+                    }
+                    
                     if let errorMessage = errorMessage {
                         Text(errorMessage)
                             .foregroundColor(.red)
