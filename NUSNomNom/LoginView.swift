@@ -87,7 +87,7 @@ struct LoginView: View {
     }
 
     func login() {
-            guard let url = URL(string: "http://209.38.57.6/api/session") else {
+            guard let url = URL(string: "http://68.183.235.200:3000/api/session") else {
                 errorMessage = "Invalid backend URL"
                 return
             }
