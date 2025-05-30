@@ -32,37 +32,52 @@ struct RegisterView: View {
                 LinearGradient(gradient: Gradient(colors: [.blue, .orange]),
                                startPoint: .topLeading,
                                endPoint: .bottomTrailing)
-                .ignoresSafeArea()
+                    .ignoresSafeArea()
 
-                Form {
-                    Section(header: Text("Personal Information")) {
+                VStack(spacing: 20) {
+                    Text("Create an Account")
+                        .font(.largeTitle)
+                        .bold()
+                        .foregroundColor(.white)
+
+                    Group {
                         TextField("Full Name", text: $name)
                         TextField("Email", text: $email)
                             .keyboardType(.emailAddress)
                             .autocapitalization(.none)
-                    }
-
-                    Section(header: Text("Password")) {
                         SecureField("Password", text: $password)
                         SecureField("Confirm Password", text: $confirmPassword)
                     }
+                    .padding()
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
 
                     if let error = errorMessage {
                         Text(error)
                             .foregroundColor(.red)
+                            .padding(.horizontal)
                     }
 
                     Button("Register") {
                         register()
                     }
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.green)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
                     .disabled(name.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty)
+
+                    Spacer()
                 }
-                .scrollContentBackground(.hidden)
-                .background(Color.clear)
-                .navigationTitle("Register")
-                .navigationDestination(isPresented: $navigateToLogin) {
-                    LoginView()
-                }
+                .padding(.top)
+            }
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(isPresented: $navigateToLogin) {
+                LoginView()
             }
         }
     }
@@ -92,26 +107,35 @@ struct RegisterView: View {
         request.httpBody = jsonData
 
         URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
+            if let error = error {
                 DispatchQueue.main.async {
-                    errorMessage = "Network error"
+                    errorMessage = "Network error: \(error.localizedDescription)"
                 }
                 return
             }
 
-            if let decoded = try? JSONDecoder().decode(RegisterResponse.self, from: data), decoded.success {
+            guard let data = data,
+                  let decoded = try? JSONDecoder().decode(RegisterResponse.self, from: data) else {
+                DispatchQueue.main.async {
+                    errorMessage = "Registration failed"
+                }
+                return
+            }
+
+            if decoded.success {
                 DispatchQueue.main.async {
                     errorMessage = nil
                     navigateToLogin = true
                 }
             } else {
                 DispatchQueue.main.async {
-                    errorMessage = "Registration failed"
+                    errorMessage = decoded.message
                 }
             }
         }.resume()
     }
 }
+
 
 
 #Preview {
