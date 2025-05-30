@@ -8,13 +8,12 @@
 import SwiftUI
 
 struct RegisterRequest: Codable {
-    let name: String
+    let displayName: String
     let email: String
     let password: String
 }
 
 struct RegisterResponse: Codable {
-    let success: Bool
     let message: String
 }
 
@@ -25,6 +24,7 @@ struct RegisterView: View {
     @State private var confirmPassword = ""
     @State private var errorMessage: String?
     @State private var navigateToLogin = false
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
         NavigationStack {
@@ -74,11 +74,6 @@ struct RegisterView: View {
                 }
                 .padding(.top)
             }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(isPresented: $navigateToLogin) {
-                LoginView()
-            }
         }
     }
 
@@ -93,7 +88,7 @@ struct RegisterView: View {
             return
         }
 
-        let requestData = RegisterRequest(name: name, email: email, password: password)
+        let requestData = RegisterRequest(displayName: name, email: email, password: password)
 
         guard let url = URL(string: "http://68.183.235.200:3000/api/user"),
               let jsonData = try? JSONEncoder().encode(requestData) else {
@@ -107,36 +102,34 @@ struct RegisterView: View {
         request.httpBody = jsonData
 
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                if let error = error {
                     errorMessage = "Network error: \(error.localizedDescription)"
+                    return
                 }
-                return
-            }
 
-            guard let data = data,
-                  let decoded = try? JSONDecoder().decode(RegisterResponse.self, from: data) else {
-                DispatchQueue.main.async {
-                    errorMessage = "Registration failed"
+                guard let httpResponse = response as? HTTPURLResponse,
+                      let data = data else {
+                    errorMessage = "Invalid server response"
+                    return
                 }
-                return
-            }
 
-            if decoded.success {
-                DispatchQueue.main.async {
-                    errorMessage = nil
+                if (200...299).contains(httpResponse.statusCode) {
                     navigateToLogin = true
-                }
-            } else {
-                DispatchQueue.main.async {
-                    errorMessage = decoded.message
+                    errorMessage = nil
+                    dismiss()
+                    
+                } else {
+                    if let decoded = try? JSONDecoder().decode(RegisterResponse.self, from: data) {
+                        errorMessage = decoded.message
+                    } else {
+                        errorMessage = "Registration failed with status code \(httpResponse.statusCode)"
+                    }
                 }
             }
         }.resume()
     }
 }
-
-
 
 #Preview {
     RegisterView()
