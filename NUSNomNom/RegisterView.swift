@@ -80,7 +80,7 @@ struct RegisterView: View {
 
         let requestData = RegisterRequest(name: name, email: email, password: password)
 
-        guard let url = URL(string: "https://your-backend.com/register"),
+        guard let url = URL(string: "http://68.183.235.200:3000/api/user"),
               let jsonData = try? JSONEncoder().encode(requestData) else {
             errorMessage = "Invalid request"
             return
