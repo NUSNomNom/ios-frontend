@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MapKit
 
 struct Store: Hashable, Identifiable {
     let id = UUID()
@@ -48,4 +49,17 @@ struct MockStoreData {
         Store(name: "Salad Bar", isOpen: true, cuisine: "Healthy", description: "Customisable salads with a range of toppings and dressings. Light and refreshing meals.", location: "Frontier")
     ]
 }
+
+struct Location: Identifiable {
+    let id = UUID()
+    let name: String
+    let coordinate: CLLocationCoordinate2D
+}
+
+let nusLocations: [Location] = [
+    Location(name: "The Deck", coordinate: CLLocationCoordinate2D(latitude: 1.2966, longitude: 103.7764)),
+    Location(name: "Techno Edge", coordinate: CLLocationCoordinate2D(latitude: 1.2961, longitude: 103.7732)),
+    Location(name: "UTown Food Clique", coordinate: CLLocationCoordinate2D(latitude: 1.3050, longitude: 103.7722)),
+    Location(name: "Frontier", coordinate: CLLocationCoordinate2D(latitude: 1.2972, longitude: 103.7801))
+]
 
