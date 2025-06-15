@@ -10,6 +10,9 @@ import SwiftUI
 struct SettingView: View {
     @AppStorage("isLoggedIn") private var isLoggedIn: Bool = false
     @State private var isShowingLogin = false
+    @AppStorage("userName") var userName: String = ""
+    @AppStorage("userEmail") var userEmail: String = ""
+
 
     var body: some View {
         NavigationStack {
@@ -21,9 +24,9 @@ struct SettingView: View {
                                 .font(.largeTitle)
                                 .foregroundColor(.blue)
                             VStack(alignment: .leading) {
-                                Text("placeholder name")
+                                Text(userName)
                                     .font(.headline)
-                                Text("student@u.nus.edu")
+                                Text(userEmail)
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                             }

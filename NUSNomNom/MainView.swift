@@ -8,32 +8,33 @@
 import SwiftUI
 
 struct MainView: View {
+    let locationViewModel: LocationViewModel  // now passed in
+
     var body: some View {
         TabView {
+            
             SearchView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }
-
+            
             ReviewsView()
                 .tabItem {
                     Label("Reviews", systemImage: "text.bubble")
                 }
-
-            NavigationView()
+            
+            NavigationView(locationViewModel: locationViewModel) // pass down
                 .tabItem {
                     Label("Map", systemImage: "map")
                 }
             
             SettingView()
-                .tabItem{
-                    Label("Settings", systemImage: "gearshape")
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
                 }
         }
-        .navigationBarBackButtonHidden(false)
     }
 }
 
-#Preview {
-    MainView()
-}
+
+

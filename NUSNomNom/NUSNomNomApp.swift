@@ -6,14 +6,19 @@
 //
 
 import SwiftUI
-import SwiftData
 
 @main
 struct NusNomNomApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            let locationViewModel = LocationViewModel()
+            MainView(locationViewModel: locationViewModel)
+                .onAppear {
+                    locationViewModel.fetchLocations()
+                }
         }
     }
 }
+
+
 
