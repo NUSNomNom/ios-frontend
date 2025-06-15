@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct NavigationView: View {
+    let locationViewModel: LocationViewModel  // passed in from MainView
     @StateObject private var locationManager = LocationManager()
     
     @State private var region = MKCoordinateRegion(
@@ -18,7 +19,7 @@ struct NavigationView: View {
 
     var body: some View {
         ZStack {
-            Map(coordinateRegion: $region, annotationItems: nusLocations) { location in
+            Map(coordinateRegion: $region, annotationItems: locationViewModel.nusLocations) { location in
                 MapAnnotation(coordinate: location.coordinate) {
                     VStack {
                         Image(systemName: "fork.knife")
@@ -79,6 +80,4 @@ struct NavigationView: View {
 }
 
 
-#Preview {
-    NavigationView()
-}
+
