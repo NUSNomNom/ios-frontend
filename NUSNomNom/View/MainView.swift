@@ -21,6 +21,12 @@ struct MainView: View {
                 }
                 .environmentObject(dataManager)
             
+            SearchView()
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
+                .environmentObject(dataManager)
+            
             MapView()
                 .tabItem {
                     Label("Map", systemImage: "map")
