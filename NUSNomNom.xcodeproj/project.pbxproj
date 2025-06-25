@@ -262,7 +262,7 @@
 		C33F28472DC89E3600688C2A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				API_URL = "https://nomnom-t9kyp.ondigitalocean.app/";
+				API_URL = "https://nomnom-t9kyp.ondigitalocean.app";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -292,7 +292,7 @@
 		C33F28482DC89E3600688C2A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				API_URL = "https://nomnom-t9kyp.ondigitalocean.app/";
+				API_URL = "https://nomnom-t9kyp.ondigitalocean.app";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
