@@ -30,55 +30,84 @@ struct RegisterView: View {
     
     @EnvironmentObject var auth: AuthManager
 
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
-        ZStack {
-            LinearGradient(gradient: Gradient(colors: [.nusBlue, .nusOrange]),
-                           startPoint: .topLeading,
-                           endPoint: .bottomTrailing)
-                .ignoresSafeArea()
-
-            VStack(spacing: 20) {
-                Text("Create an Account")
-                    .font(.largeTitle)
-                    .bold()
-                    .foregroundColor(.white)
-
-                Group {
-                    TextField("Display Name", text: $inputDisplayName)
-                    TextField("Email Address", text: $inputEmail)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                    SecureField("Password", text: $inputPassword)
-                    SecureField("Confirm Password", text: $inputConfirmPassword)
+        
+        VStack(spacing: 20) {
+            
+            HStack {
+                Spacer()
+                Button("Cancel") {
+                    dismiss()
                 }
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
-                .padding(.horizontal)
-
-                Button("Register") {
-                    Task {
-                        do {
-                            try await auth.register(displayName: inputDisplayName, email: inputEmail, password: inputPassword)
-                            registerSuccess = true
-                        } catch {
-                            alertMessage = error.localizedDescription
-                            showErrorAlert = true
-                        }
+                .foregroundColor(.blue)
+                .fontWeight(.bold)
+                .padding(.trailing)
+            }
+            
+            Image(systemName: "envelope")
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.blue)
+                .frame(width: 80, height: 80)
+                .padding(.top, 20)
+                .frame(maxWidth: .infinity, alignment: .center)
+            
+            Text("Create an Account")
+                .font(.title)
+                .bold()
+                .foregroundColor(.black)
+            
+            Text("Use your email to create an account and start eating!")
+                .font(.subheadline)
+                .bold()
+                .foregroundColor(.gray)
+            
+            Group {
+                TextField("Display Name", text: $inputDisplayName)
+                TextField("Email Address", text: $inputEmail)
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
+                SecureField("Password", text: $inputPassword)
+                SecureField("Confirm Password", text: $inputConfirmPassword)
+            }
+            .padding()
+            .background(Color(.secondarySystemBackground))
+            .cornerRadius(12)
+            .padding(.horizontal)
+            
+            Button("Register") {
+                
+                if let error = validateInputs() {
+                    alertMessage = error
+                    showErrorAlert = true
+                    return
+                }
+                
+                Task {
+                    do {
+                        try await auth.register(displayName: inputDisplayName, email: inputEmail, password: inputPassword)
+                        registerSuccess = true
+                    } catch {
+                        alertMessage = error.localizedDescription
+                        showErrorAlert = true
                     }
                 }
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.green)
-                .cornerRadius(12)
-                .padding(.horizontal)
-                .disabled(inputDisplayName.isEmpty || inputEmail.isEmpty || inputPassword.isEmpty || inputConfirmPassword.isEmpty)
-
-                Spacer()
             }
-            .padding(.top)
+            .foregroundColor(.white)
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.blue)
+            .fontWeight(.bold)
+            .cornerRadius(12)
+            .padding(.horizontal)
+            .disabled(inputDisplayName.isEmpty || inputEmail.isEmpty || inputPassword.isEmpty || inputConfirmPassword.isEmpty)
+            
+            Spacer()
         }
+        .padding(.top)
+        
         .alert(
             "Registration Error",
             isPresented: $showErrorAlert,
@@ -88,4 +117,31 @@ struct RegisterView: View {
             Text(alertMessage ?? "Unknown error occurred")
         }
     }
+    
+    private func validateInputs() -> String? {
+        if inputDisplayName.isEmpty || inputEmail.isEmpty || inputPassword.isEmpty || inputConfirmPassword.isEmpty {
+            return "All fields are required."
+        }
+        
+        if !inputEmail.contains("@") || !inputEmail.contains(".") {
+            return "Please enter a valid email address."
+        }
+        
+        if inputPassword.count < 8 {
+            return "Password must be at least 8 characters long."
+        }
+        
+        if inputPassword != inputConfirmPassword {
+            return "Passwords do not match."
+        }
+
+        return nil
+    }
+    
+}
+
+
+#Preview {
+    RegisterView(registerSuccess: .constant(false))
+        .environmentObject(AuthManager.shared)
 }
