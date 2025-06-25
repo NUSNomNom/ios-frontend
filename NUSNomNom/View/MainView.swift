@@ -15,7 +15,7 @@ struct MainView: View {
     
     var body: some View {
         TabView {
-            AllView()
+            LocationView()
                 .tabItem {
                     Label("Locations", systemImage: "list.bullet")
                 }

@@ -1,13 +1,13 @@
 //
-//  AllView.swift
+//  LocationView.swift
 //  NUSNomNom
 //
-//  Created by Nutabi on 21/6/25.
+//  Created by Kevan Chng on 25/6/25.
 //
 
 import SwiftUI
 
-struct AllView: View {
+struct LocationView: View {
     @EnvironmentObject private var data: DataManager
     @State private var searchText: String = ""
     
@@ -90,6 +90,7 @@ struct AllView: View {
 }
 
 #Preview {
-    AllView()
+    LocationView()
         .environmentObject(DataManager.shared)
 }
+
