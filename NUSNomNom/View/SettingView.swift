@@ -52,11 +52,11 @@ struct SettingView: View {
                                 Button("Sign Out") {
                                     auth.logout()
                                 }
-                                .foregroundStyle(.red)
+                                .foregroundStyle(.white)
                                 .fontWeight(.bold)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.gray)
+                                .background(.nusOrange)
                                 .cornerRadius(12)
                             }
                             

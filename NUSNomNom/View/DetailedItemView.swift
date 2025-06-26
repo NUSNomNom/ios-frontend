@@ -9,57 +9,57 @@ import SwiftUI
 
 struct DetailedItemView: View {
     let item: Item
-    
+
     var body: some View {
-        
-        Image("nusNomNomLongLogo")
-            .resizable()
-            .scaledToFit()
-            .frame(height: 100)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 25)
-        
         ScrollView {
-            
-            Image(systemName: "photo")
-                .resizable()
-                .foregroundColor(.blue)
-                .scaledToFill()
-                .frame(height: 300)
-                .frame(maxWidth: .infinity)
-                .clipped()
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Text(item.name)
-                    .font(.system(size: 40, weight: .bold))
-                    .foregroundColor(.nusBlue)
-                    .lineLimit(1)
+            VStack(alignment: .leading, spacing: 20) {
                 
-                Text(item.information)
-                    .font(.headline)
-                    .foregroundColor(.black)
-                
-                HStack {
-                    Text("Price:")
-                        .font(.subheadline)
-                    
-                    
-                    Text(String(format: "$%.2f", item.price.doubleValue))
-                        .font(.subheadline)
+                Image("nusNomNomLongLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 100)
+
+                Image(systemName: "photo")
+                    .resizable()
+                    .foregroundColor(.blue)
+                    .scaledToFill()
+                    .frame(height: 290)
+                    .frame(maxWidth: .infinity)
+                    .clipped()
+                    .cornerRadius(12)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(item.name)
+                        .font(.system(size: 40, weight: .bold))
+                        .foregroundColor(.nusBlue)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+
+                    Text(item.information)
+                        .font(.headline)
                         .foregroundColor(.black)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("Price:")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                        Text(String(format: "$%.2f", item.price.doubleValue))
+                            .font(.subheadline)
+                    }
+
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("Availability:")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                        Text(item.is_available ? "Available" : "Sold Out")
+                            .font(.subheadline)
+                            .foregroundColor(item.is_available ? .green : .red)
+                    }
                 }
-                
-                HStack {
-                    Text("Availability:")
-                        .font(.subheadline)
-                    
-                    Text(item.is_available ? "Available" : "Sold Out")
-                        .font(.subheadline)
-                        .foregroundColor(item.is_available ? .green : .red)
-                }
-                
             }
-            Spacer()
+            .padding(.horizontal)
+            .padding(.top)
         }
     }
 }
