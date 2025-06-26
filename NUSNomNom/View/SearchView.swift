@@ -9,55 +9,76 @@ import SwiftUI
 
 struct SearchView: View {
     @EnvironmentObject private var data: DataManager
-    @State private var searchText: String = ""
     
+    @State private var searchText: String = ""
+
+    @State private var isShowingFilterSheet = false
+    @State private var selectedCuisines: Set<String> = []
+    @State private var showOnlyOpenStores = false
+
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
     ]
-    
+
+    private var allCuisines: [String] {
+        Set(data.locations.flatMap { $0.stores.map { $0.cuisine } }).sorted()
+    }
+
     private var filteredStores: [(store: Store, locationName: String)] {
-        if searchText.isEmpty {
-            return data.locations.flatMap { location in
-                location.stores.map { (store: $0, locationName: location.name) }
-            }
-        } else {
-            return data.locations.flatMap { location in
-                location.stores
-                    .filter { $0.name.localizedCaseInsensitiveContains(searchText) }
-                    .map { (store: $0, locationName: location.name) }
-            }
+        data.locations.flatMap { location in
+            location.stores
+                .filter { store in
+                    let matchesSearch = searchText.isEmpty || store.name.localizedCaseInsensitiveContains(searchText)
+                    let matchesCuisine = selectedCuisines.isEmpty || selectedCuisines.contains(store.cuisine)
+                    let matchesOpen = !showOnlyOpenStores || store.is_open
+                    return matchesSearch && matchesCuisine && matchesOpen
+                }
+                .map { (store: $0, locationName: location.name) }
         }
     }
-    
+
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(alignment: .leading) {
                 Image("nusNomNomLongLogo")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 100)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 25)
-                
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
 
-                    TextField("Search stores...", text: $searchText)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
+                HStack(spacing: 12) {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+
+                        TextField("Search stores...", text: $searchText)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
+                    }
+                    .padding(12)
+                    .background(Color(.secondarySystemBackground))
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                    )
+
+                    Button(action: {
+                        isShowingFilterSheet = true
+                    }) {
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundColor(.blue)
+                            .padding(10)
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10)
+                    }
                 }
-                .padding(12)
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                )
                 .padding(.horizontal)
             }
-            
+
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(filteredStores, id: \.store.id) { pair in
@@ -90,8 +111,17 @@ struct SearchView: View {
                 }
                 .padding()
             }
-            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isShowingFilterSheet) {
+                FilterSheetView(
+                    allCuisines: allCuisines,
+                    selectedCuisines: $selectedCuisines,
+                    showOnlyOpenStores: $showOnlyOpenStores
+                ) {
+                    isShowingFilterSheet = false
+                }
+            }
         }
     }
 }
