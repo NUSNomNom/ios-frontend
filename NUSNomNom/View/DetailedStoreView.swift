@@ -20,7 +20,8 @@ struct DetailedStoreView: View {
     }
     
     var body: some View {
-        
+        ScrollView {
+            
         VStack(alignment: .leading, spacing: 20) {
             Image("nusNomNomLongLogo")
                 .resizable()
@@ -29,7 +30,6 @@ struct DetailedStoreView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.leading, 25)
             
-            ScrollView {
                 Text(store.name)
                     .font(.system(size: 40, weight: .bold))
                     .foregroundColor(.nusBlue)
