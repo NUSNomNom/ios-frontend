@@ -35,12 +35,12 @@ struct SettingView: View {
                                     .frame(maxWidth: .infinity, alignment: .center)
 
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("auth.displayName")
+                                        Text(auth.displayName)
                                             .font(.title)
                                             .fontWeight(.bold)
                                             .frame(maxWidth: .infinity, alignment: .center)
 
-                                        Text("auth.email")
+                                        Text(auth.email)
                                             .font(.subheadline)
                                             .frame(maxWidth: .infinity, alignment: .center)
                                             .foregroundColor(.gray)
