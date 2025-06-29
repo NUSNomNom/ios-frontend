@@ -13,6 +13,7 @@ struct Location: Identifiable, Codable, Hashable {
     var name: String
     @StringToDecimal var latitude: Decimal
     @StringToDecimal var longitude: Decimal
+    var image_url: URL
     var stores: [Store]
     
     func asCoord() -> CLLocationCoordinate2D {

@@ -21,23 +21,21 @@ struct DetailedStoreView: View {
     
     var body: some View {
         ScrollView {
-            
-        VStack(alignment: .leading, spacing: 20) {
-            Image("nusNomNomLongLogo")
-                .resizable()
-                .scaledToFit()
-                .frame(height: 100)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 25)
-            
+            VStack(alignment: .leading, spacing: 20) {
+                Image("nusNomNomLongLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 100)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 25)
+                
                 Text(store.name)
                     .font(.system(size: 40, weight: .bold))
                     .foregroundColor(.nusBlue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 26)
                 
-                Image(systemName: "photo")
-                    .resizable()
+                RemoteImage(image_url: store.image_url)
                     .scaledToFill()
                     .frame(height: 200)
                     .frame(maxWidth: .infinity)
@@ -53,10 +51,8 @@ struct DetailedStoreView: View {
                     .padding(.horizontal)
                     
                     switch selectedTab {
-                        
                     case .details:
                         VStack(spacing: 10) {
-                            
                             Text("Information:")
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -87,7 +83,6 @@ struct DetailedStoreView: View {
                             
                         }
                         .padding()
-                        
                     case .items:
                         VStack(spacing: 12) {
                             ForEach(store.items) { item in
@@ -95,8 +90,7 @@ struct DetailedStoreView: View {
                                     DetailedItemView(item: item)
                                 } label: {
                                     HStack {
-                                        Image(systemName: "photo")
-                                            .resizable()
+                                        RemoteImage(image_url: item.image_url)
                                             .scaledToFill()
                                             .frame(width: 40, height: 40)
                                             .padding(10)
@@ -144,7 +138,8 @@ struct DetailedStoreView: View {
         name: "Fried Rice",
         price: .init(wrapperValue: Decimal(string: "5.00") ?? 0),
         is_available: true,
-        information: "Classic egg fried rice with vegetables."
+        information: "Classic egg fried rice with vegetables.",
+        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/item_chinese_1.jpeg")!
     )
 
     let mockStore = Store(
@@ -153,6 +148,7 @@ struct DetailedStoreView: View {
         is_open: true,
         cuisine: "Chinese",
         information: "Wok-fried Chinese specialties",
+        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/store_chinese.jpeg")!,
         items: [mockItem]
     )
 

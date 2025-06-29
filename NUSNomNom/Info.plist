@@ -3,9 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>API_URL</key>
-	<string>https://nomnom-t9kyp.ondigitalocean.app</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs your location to show food stalls near you.</string>
+	<string>http://localhost:3000</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

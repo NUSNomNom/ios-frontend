@@ -13,33 +13,31 @@ struct DetailedItemView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                
                 Image("nusNomNomLongLogo")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 100)
-
-                Image(systemName: "photo")
-                    .resizable()
+                
+                RemoteImage(image_url: item.image_url)
                     .foregroundColor(.blue)
-                    .scaledToFill()
+                    .scaledToFit()
                     .frame(height: 290)
                     .frame(maxWidth: .infinity)
                     .clipped()
                     .cornerRadius(12)
-
+                
                 VStack(alignment: .leading, spacing: 12) {
                     Text(item.name)
                         .font(.system(size: 40, weight: .bold))
                         .foregroundColor(.nusBlue)
                         .lineLimit(1)
                         .truncationMode(.tail)
-
+                    
                     Text(item.information)
                         .font(.headline)
                         .foregroundColor(.black)
                         .fixedSize(horizontal: false, vertical: true)
-
+                    
                     HStack(alignment: .firstTextBaseline) {
                         Text("Price:")
                             .font(.subheadline)
@@ -47,7 +45,7 @@ struct DetailedItemView: View {
                         Text(String(format: "$%.2f", item.price.doubleValue))
                             .font(.subheadline)
                     }
-
+                    
                     HStack(alignment: .firstTextBaseline) {
                         Text("Availability:")
                             .font(.subheadline)
@@ -61,6 +59,7 @@ struct DetailedItemView: View {
             .padding(.horizontal)
             .padding(.top)
         }
+        .ignoresSafeArea(.container, edges: .bottom)
     }
 }
 
@@ -70,7 +69,8 @@ struct DetailedItemView: View {
         name: "Fried Rice",
         price: .init(wrapperValue: Decimal(string: "5.00") ?? 0),
         is_available: true,
-        information: "Classic egg fried rice with vegetables and soy sauce."
+        information: "Classic egg fried rice with vegetables and soy sauce.",
+        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/item_chinese_1.jpeg")!
     )
 
     NavigationStack {
