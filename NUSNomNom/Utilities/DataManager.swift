@@ -136,7 +136,7 @@ final class DataManager: ObservableObject {
     }
     
     private func load() {
-        let url = getDirectory().appendingPathComponent("locations.json")
+        let url = getDirectory().appendingPathComponent("cache.json")
         if let data = try? Data(contentsOf: url),
            let cache = try? JSONDecoder().decode(Cache.self, from: data) {
             self.lastUpdated = cache.date
