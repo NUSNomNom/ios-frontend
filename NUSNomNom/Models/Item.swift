@@ -13,4 +13,5 @@ struct Item: Identifiable, Codable, Hashable {
     @StringToDecimal var price: Decimal
     var is_available: Bool
     var information: String
+    var image_url: URL
 }

@@ -36,8 +36,7 @@ struct DetailedLocationView: View {
                     .foregroundColor(.nusBlue)
                     .padding(.horizontal)
 
-                Image(systemName: "photo")
-                    .resizable()
+                RemoteImage(image_url: location.image_url)
                     .scaledToFill()
                     .frame(height: 200)
                     .frame(maxWidth: .infinity)
@@ -107,7 +106,6 @@ struct DetailedLocationView: View {
                     
                     if !directionSteps.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
-                            
                             Text("Steps")
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -138,6 +136,7 @@ struct DetailedLocationView: View {
         is_open: true,
         cuisine: "Chinese",
         information: "Authentic stir-fried dishes",
+        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/store_chinese.jpeg")!,
         items: []
     )
 
@@ -146,6 +145,7 @@ struct DetailedLocationView: View {
         name: "Fine Food @ UTown",
         latitude: .init(wrapperValue: Decimal(string: "1.3041") ?? 0),
         longitude: .init(wrapperValue: Decimal(string: "103.7721") ?? 0),
+        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/canteen_fine_food.jpeg")!,
         stores: [mockStore]
     )
     NavigationStack {
