@@ -20,18 +20,15 @@ struct SettingView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
-                    
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Profile")
                             .font(.system(size: 25))
                             .fontWeight(.medium)
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.bottom, 4)
-                        
 
                         if auth.isLoggedIn {
                             VStack(alignment: .leading, spacing: 12) {
-
                                 Image(systemName: "person.crop.circle.fill")
                                     .font(.system(size: 80))
                                     .foregroundColor(.gray)
@@ -59,9 +56,7 @@ struct SettingView: View {
                                 .background(.nusOrange)
                                 .cornerRadius(12)
                             }
-                            
                         } else {
-                        
                             Image(systemName: "person.crop.circle.fill")
                                 .font(.system(size: 80))
                                 .foregroundColor(.gray)
@@ -76,7 +71,6 @@ struct SettingView: View {
                                 .foregroundColor(.gray)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 
-                            
                             Button("Sign in with email") {
                                 isShowingLogin = true
                             }
@@ -86,7 +80,6 @@ struct SettingView: View {
                             .padding()
                             .background(Color.blue)
                             .cornerRadius(12)
-                            
                         }
                     }
 
@@ -94,7 +87,6 @@ struct SettingView: View {
                         Text("Data")
                             .font(.headline)
                             .padding(.bottom, 4)
-
                         Button("Refresh") {
                             Task {
                                 do {
