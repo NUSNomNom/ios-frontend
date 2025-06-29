@@ -9,9 +9,8 @@ import SwiftUI
 
 struct SearchView: View {
     @EnvironmentObject private var data: DataManager
-    
-    @State private var searchText: String = ""
 
+    @State private var searchText: String = ""
     @State private var isShowingFilterSheet = false
     @State private var selectedCuisines: Set<String> = []
     @State private var showOnlyOpenStores = false
@@ -85,27 +84,7 @@ struct SearchView: View {
                         NavigationLink {
                             DetailedStoreView(store: pair.store)
                         } label: {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Image(systemName: "photo")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 150, height: 150)
-                                    .clipped()
-                                    .cornerRadius(12)
-
-                                Text(pair.store.name)
-                                    .foregroundColor(.black)
-                                    .font(.headline)
-                                    .lineLimit(1)
-
-                                Text(pair.locationName)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
-                            }
-                            .padding()
-                            .background(Color(.systemBackground))
-                            .cornerRadius(16)
-                            .shadow(radius: 4)
+                            storeCard(for: pair)
                         }
                     }
                 }
@@ -123,6 +102,30 @@ struct SearchView: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func storeCard(for pair: (store: Store, locationName: String)) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            RemoteImage(image_url: pair.store.image_url)
+                .scaledToFill()
+                .frame(width: 150, height: 150)
+                .clipped()
+                .cornerRadius(12)
+
+            Text(pair.store.name)
+                .foregroundColor(.black)
+                .font(.headline)
+                .lineLimit(1)
+
+            Text(pair.locationName)
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(radius: 4)
     }
 }
 
