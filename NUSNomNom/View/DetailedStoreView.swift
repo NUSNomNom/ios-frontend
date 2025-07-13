@@ -9,13 +9,14 @@ import SwiftUI
 
 struct DetailedStoreView: View {
     let store: Store
-    @EnvironmentObject private var data: DataManager
+    @EnvironmentObject private var data: AuthManager
     
     @State private var selectedTab: Tab = .details
     
     enum Tab: String, CaseIterable, Identifiable {
         case details = "Details"
         case items = "Items"
+        case reviews = "Reviews"
         var id: String { rawValue }
     }
     
@@ -122,6 +123,8 @@ struct DetailedStoreView: View {
                                 }
                             }
                         }
+                    case .reviews:
+                        StoreReviewsView(store: store)
                     }
                 }
                 .padding(.bottom)
@@ -155,4 +158,5 @@ struct DetailedStoreView: View {
     NavigationStack {
         DetailedStoreView(store: mockStore)
     }
+    .environmentObject(AuthManager.shared)
 }

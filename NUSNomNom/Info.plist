@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs </string>
+	<string>This app needs your location to show locations near you.</string>
 	<key>API_URL</key>
 	<string>https://nomnom-t9kyp.ondigitalocean.app</string>
 	<key>NSAppTransportSecurity</key>
