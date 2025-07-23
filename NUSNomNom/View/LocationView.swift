@@ -61,7 +61,7 @@ struct LocationView: View {
                             DetailedLocationView(location: location)
                         } label: {
                             VStack {
-                                RemoteImage(image_url: location.image_url)
+                                RemoteImage(image_url: location.imageUrl)
                                     .scaledToFill()
                                     .frame(width: 150, height: 150)
                                     .clipped()

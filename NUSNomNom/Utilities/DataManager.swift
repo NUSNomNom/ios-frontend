@@ -122,7 +122,9 @@ final class DataManager: ObservableObject {
                 throw DataError.httpError(statusCode: response.statusCode)
             }
             
-            guard let user = try? JSONDecoder().decode(GetPublicUserResponseItem.self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            guard let user = try? decoder.decode(GetPublicUserResponseItem.self, from: data) else {
                 throw DataError.decodingFailed
             }
             
@@ -160,7 +162,9 @@ final class DataManager: ObservableObject {
                 throw DataError.httpError(statusCode: response.statusCode)
             }
             
-            guard let reviews = try? JSONDecoder().decode([Review].self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            guard let reviews = try? decoder.decode([Review].self, from: data) else {
                 throw DataError.decodingFailed
             }
             
@@ -183,13 +187,14 @@ final class DataManager: ObservableObject {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.allHTTPHeaderFields = ["X-Api-Key": nomerAccessToken]
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(nomerAccessToken, forHTTPHeaderField: "X-Api-Key")
         
         let body = SubmitReviewRequestBody(storeId: storeId, score: score, comment: comment)
         request.httpBody = try? JSONEncoder().encode(body)
         
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
+            let (_, response) = try await URLSession.shared.data(for: request)
             
             guard let response = response as? HTTPURLResponse else {
                 throw DataError.invalidResponse
@@ -232,7 +237,9 @@ final class DataManager: ObservableObject {
                 throw DataError.httpError(statusCode: response.statusCode)
             }
             
-            guard let locations = try? JSONDecoder().decode([Location].self, from: data) else {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            guard let locations = try? decoder.decode([Location].self, from: data) else {
                 throw DataError.decodingFailed
             }
             
@@ -252,17 +259,26 @@ final class DataManager: ObservableObject {
     private func save() {
         let url = getDirectory().appendingPathComponent("cache.json")
         let cache = Cache(date: lastUpdated, locations: locations)
-        if let data = try? JSONEncoder().encode(cache) {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .iso8601
+        if let data = try? encoder.encode(cache) {
             try? data.write(to: url)
         }
     }
     
     private func load() {
         let url = getDirectory().appendingPathComponent("cache.json")
-        if let data = try? Data(contentsOf: url),
-           let cache = try? JSONDecoder().decode(Cache.self, from: data) {
-            self.lastUpdated = cache.date
-            self.locations = cache.locations
+        if let data = try? Data(contentsOf: url) {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            if let cache = try? decoder.decode(Cache.self, from: data) {
+                self.lastUpdated = cache.date
+                self.locations = cache.locations
+            } else {
+                Task {
+                    try? await refresh()
+                }
+            }
         } else {
             Task {
                 try? await refresh()

@@ -36,7 +36,7 @@ struct DetailedLocationView: View {
                     .foregroundColor(.nusBlue)
                     .padding(.horizontal)
 
-                RemoteImage(image_url: location.image_url)
+                RemoteImage(image_url: location.imageUrl)
                     .scaledToFill()
                     .frame(height: 200)
                     .frame(maxWidth: .infinity)
@@ -73,9 +73,9 @@ struct DetailedLocationView: View {
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
 
-                                    Text(store.is_open ? "Open" : "Closed")
+                                    Text(store.isOpen ? "Open" : "Closed")
                                         .font(.caption)
-                                        .foregroundColor(store.is_open ? .green : .red)
+                                        .foregroundColor(store.isOpen ? .green : .red)
                                 }
 
                                 Spacer()
@@ -133,10 +133,10 @@ struct DetailedLocationView: View {
     let mockStore = Store(
         id: 1,
         name: "Golden Wok",
-        is_open: true,
+        isOpen: true,
         cuisine: "Chinese",
         information: "Authentic stir-fried dishes",
-        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/store_chinese.jpeg")!,
+        imageUrl: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/store_chinese.jpeg")!,
         items: []
     )
 
@@ -145,7 +145,7 @@ struct DetailedLocationView: View {
         name: "Fine Food @ UTown",
         latitude: .init(wrapperValue: Decimal(string: "1.3041") ?? 0),
         longitude: .init(wrapperValue: Decimal(string: "103.7721") ?? 0),
-        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/canteen_fine_food.jpeg")!,
+        imageUrl: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/canteen_fine_food.jpeg")!,
         stores: [mockStore]
     )
     NavigationStack {

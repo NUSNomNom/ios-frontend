@@ -36,7 +36,7 @@ struct DetailedStoreView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 26)
                 
-                RemoteImage(image_url: store.image_url)
+                RemoteImage(image_url: store.imageUrl)
                     .scaledToFill()
                     .frame(height: 200)
                     .frame(maxWidth: .infinity)
@@ -78,8 +78,8 @@ struct DetailedStoreView: View {
                                 .foregroundColor(.nusBlue)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            Text(store.is_open ? "Open" : "Closed")
-                                .foregroundColor(store.is_open ? .green : .red)
+                            Text(store.isOpen ? "Open" : "Closed")
+                                .foregroundColor(store.isOpen ? .green : .red)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                         }
@@ -91,7 +91,7 @@ struct DetailedStoreView: View {
                                     DetailedItemView(item: item)
                                 } label: {
                                     HStack {
-                                        RemoteImage(image_url: item.image_url)
+                                        RemoteImage(image_url: item.imageUrl)
                                             .scaledToFill()
                                             .frame(width: 40, height: 40)
                                             .padding(10)
@@ -106,9 +106,9 @@ struct DetailedStoreView: View {
                                                 .foregroundColor(.gray)
                                                 .lineLimit(1)
                                             
-                                            Text(item.is_available ? "Available" : "Sold Out")
+                                            Text(item.isAvailable ? "Available" : "Sold Out")
                                                 .font(.caption)
-                                                .foregroundColor(item.is_available ? .green : .red)
+                                                .foregroundColor(item.isAvailable ? .green : .red)
                                         }
                                         
                                         Spacer()
@@ -140,18 +140,18 @@ struct DetailedStoreView: View {
         id: 1,
         name: "Fried Rice",
         price: .init(wrapperValue: Decimal(string: "5.00") ?? 0),
-        is_available: true,
+        isAvailable: true,
         information: "Classic egg fried rice with vegetables.",
-        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/item_chinese_1.jpeg")!
+        imageUrl: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/item_chinese_1.jpeg")!
     )
 
     let mockStore = Store(
         id: 1,
         name: "Golden Wok",
-        is_open: true,
+        isOpen: true,
         cuisine: "Chinese",
         information: "Wok-fried Chinese specialties",
-        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/store_chinese.jpeg")!,
+        imageUrl: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/store_chinese.jpeg")!,
         items: [mockItem]
     )
 

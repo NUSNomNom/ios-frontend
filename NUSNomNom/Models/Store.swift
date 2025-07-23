@@ -10,9 +10,9 @@ import Foundation
 struct Store: Identifiable, Codable, Hashable {
     var id: Int
     var name: String
-    var is_open: Bool
+    var isOpen: Bool
     var cuisine: String
     var information: String
-    var image_url: URL
+    var imageUrl: URL
     var items: [Item]
 }
