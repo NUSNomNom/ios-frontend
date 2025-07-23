@@ -86,6 +86,20 @@ final class DataManager: ObservableObject {
         return formatter.string(from: date)
     }
     
+    func getPublicUsername(of userId: Int) async throws -> String {
+        // Get user display name from GET /api/user/{userId}
+        return "Mock Name"
+    }
+    
+    func getReviews(of storeId: Int) async throws -> [Review] {
+        // Get reviews from GET /api/review/
+        return []
+    }
+    
+    func submitReview(for storeId: Int, by nomerAccessToken: String, score: Int, comment: String) async throws {
+        // Create review at POST /api/review
+    }
+    
     private func fetch() async throws {
         guard let apiUrl = Bundle.main.infoDictionary?["API_URL"] as? String,
               let url = URL(string: "\(apiUrl)/api/data")
