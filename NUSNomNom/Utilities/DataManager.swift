@@ -25,9 +25,20 @@ struct GetOneLocationResponseItem: Codable {
 struct StoreNoItems: Codable {
     let id: Int
     let name: String
-    let is_open: Bool
+    let isOpen: Bool
     let cuisine: String
     let information: String
+}
+
+struct GetPublicUserResponseItem: Codable {
+    let id: Int
+    let displayName: String
+}
+
+struct SubmitReviewRequestBody: Codable {
+    let storeId: Int
+    let score: Int
+    let comment: String
 }
 
 enum DataError: Error {
@@ -88,16 +99,113 @@ final class DataManager: ObservableObject {
     
     func getPublicUsername(of userId: Int) async throws -> String {
         // Get user display name from GET /api/user/{userId}
-        return "Mock Name"
+        guard let apiUrl = Bundle.main.infoDictionary?["API_URL"] as? String,
+              let url = URL(string: "\(apiUrl)/api/user/\(userId)")
+        else {
+            throw DataError.badConfiguration
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let response = response as? HTTPURLResponse else {
+                throw DataError.invalidResponse
+            }
+            
+            switch response.statusCode {
+            case 200..<300:
+                break
+            default:
+                throw DataError.httpError(statusCode: response.statusCode)
+            }
+            
+            guard let user = try? JSONDecoder().decode(GetPublicUserResponseItem.self, from: data) else {
+                throw DataError.decodingFailed
+            }
+            
+            return user.displayName
+            
+        } catch let error as URLError {
+            throw DataError.networkIssue(underlying: error)
+        } catch {
+            throw error
+        }
     }
     
     func getReviews(of storeId: Int) async throws -> [Review] {
         // Get reviews from GET /api/review/
-        return []
+        guard let apiUrl = Bundle.main.infoDictionary?["API_URL"] as? String,
+              let url = URL(string: "\(apiUrl)/api/review?store_id=\(storeId)")
+        else {
+            throw DataError.badConfiguration
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let response = response as? HTTPURLResponse else {
+                throw DataError.invalidResponse
+            }
+            
+            switch response.statusCode {
+            case 200..<300:
+                break
+            default:
+                throw DataError.httpError(statusCode: response.statusCode)
+            }
+            
+            guard let reviews = try? JSONDecoder().decode([Review].self, from: data) else {
+                throw DataError.decodingFailed
+            }
+            
+            return reviews
+            
+        } catch let error as URLError {
+            throw DataError.networkIssue(underlying: error)
+        } catch {
+            throw error
+        }
     }
     
     func submitReview(for storeId: Int, by nomerAccessToken: String, score: Int, comment: String) async throws {
         // Create review at POST /api/review
+        guard let apiUrl = Bundle.main.infoDictionary?["API_URL"] as? String,
+              let url = URL(string: "\(apiUrl)/api/review")
+        else {
+            throw DataError.badConfiguration
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = ["X-Api-Key": nomerAccessToken]
+        
+        let body = SubmitReviewRequestBody(storeId: storeId, score: score, comment: comment)
+        request.httpBody = try? JSONEncoder().encode(body)
+        
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let response = response as? HTTPURLResponse else {
+                throw DataError.invalidResponse
+            }
+            
+            switch response.statusCode {
+            case 200..<300:
+                break
+            default:
+                throw DataError.httpError(statusCode: response.statusCode)
+            }
+        } catch let error as URLError {
+            throw DataError.networkIssue(underlying: error)
+        } catch {
+            throw error
+        }
     }
     
     private func fetch() async throws {
