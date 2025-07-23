@@ -1,5 +1,5 @@
 //
-//  StoreLocationModel.swift
+//  Location.swift
 //  NUSNomNom
 //
 //  Created by Kevan Chng on 9/6/25.
@@ -13,7 +13,7 @@ struct Location: Identifiable, Codable, Hashable {
     var name: String
     @StringToDecimal var latitude: Decimal
     @StringToDecimal var longitude: Decimal
-    var image_url: URL
+    var imageUrl: URL
     var stores: [Store]
     
     func asCoord() -> CLLocationCoordinate2D {

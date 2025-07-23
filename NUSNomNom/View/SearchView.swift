@@ -30,7 +30,7 @@ struct SearchView: View {
                 .filter { store in
                     let matchesSearch = searchText.isEmpty || store.name.localizedCaseInsensitiveContains(searchText)
                     let matchesCuisine = selectedCuisines.isEmpty || selectedCuisines.contains(store.cuisine)
-                    let matchesOpen = !showOnlyOpenStores || store.is_open
+                    let matchesOpen = !showOnlyOpenStores || store.isOpen
                     return matchesSearch && matchesCuisine && matchesOpen
                 }
                 .map { (store: $0, locationName: location.name) }
@@ -107,7 +107,7 @@ struct SearchView: View {
     @ViewBuilder
     private func storeCard(for pair: (store: Store, locationName: String)) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            RemoteImage(image_url: pair.store.image_url)
+            RemoteImage(image_url: pair.store.imageUrl)
                 .scaledToFill()
                 .frame(width: 150, height: 150)
                 .clipped()

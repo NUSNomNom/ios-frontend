@@ -11,7 +11,7 @@ struct Item: Identifiable, Codable, Hashable {
     var id: Int
     var name: String
     @StringToDecimal var price: Decimal
-    var is_available: Bool
+    var isAvailable: Bool
     var information: String
-    var image_url: URL
+    var imageUrl: URL
 }

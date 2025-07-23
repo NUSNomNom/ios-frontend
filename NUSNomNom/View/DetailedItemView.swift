@@ -18,7 +18,7 @@ struct DetailedItemView: View {
                     .scaledToFit()
                     .frame(height: 100)
                 
-                RemoteImage(image_url: item.image_url)
+                RemoteImage(image_url: item.imageUrl)
                     .foregroundColor(.blue)
                     .scaledToFit()
                     .frame(height: 290)
@@ -50,9 +50,9 @@ struct DetailedItemView: View {
                         Text("Availability:")
                             .font(.subheadline)
                             .foregroundColor(.gray)
-                        Text(item.is_available ? "Available" : "Sold Out")
+                        Text(item.isAvailable ? "Available" : "Sold Out")
                             .font(.subheadline)
-                            .foregroundColor(item.is_available ? .green : .red)
+                            .foregroundColor(item.isAvailable ? .green : .red)
                     }
                 }
             }
@@ -68,9 +68,9 @@ struct DetailedItemView: View {
         id: 1,
         name: "Fried Rice",
         price: .init(wrapperValue: Decimal(string: "5.00") ?? 0),
-        is_available: true,
+        isAvailable: true,
         information: "Classic egg fried rice with vegetables and soy sauce.",
-        image_url: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/item_chinese_1.jpeg")!
+        imageUrl: URL(string: "https://nomnom-image.sgp1.cdn.digitaloceanspaces.com/item_chinese_1.jpeg")!
     )
 
     NavigationStack {
