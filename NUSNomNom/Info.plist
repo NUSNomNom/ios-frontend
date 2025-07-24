@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>API_URL</key>
-	<string>http://localhost:3000</string>
+	<string>https://nomnom-t9kyp.ondigitalocean.app</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

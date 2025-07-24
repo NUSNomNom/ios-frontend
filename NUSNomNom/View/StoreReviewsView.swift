@@ -25,6 +25,7 @@ struct StoreReviewsView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.nusBlue)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .lineLimit(1)
 
             Text("⭐️ \(String(format: "%.1f", averageRating)) · Based on \(reviews.count) review\(reviews.count == 1 ? "" : "s")")
                 .font(.title3)
@@ -42,11 +43,14 @@ struct StoreReviewsView: View {
                 VStack {
                     Text("No reviews yet")
                         .font(.headline)
+                        .frame(alignment: .leading)
                         .foregroundColor(.secondary)
                     Text("Be the first to leave a review!")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
+                
                 .padding()
             } else {
                 VStack(alignment: .leading, spacing: 12) {
@@ -120,7 +124,6 @@ struct StoreReviewsView: View {
             let fetchedReviews = try await data.getReviews(of: store.id)
             reviews = fetchedReviews
             
-            // Load usernames for all reviews
             for review in reviews {
                 if usernames[review.nomerId] == nil {
                     do {
@@ -151,6 +154,7 @@ struct ReviewCard: View {
             HStack {
                 Text(author)
                     .font(.headline)
+                    .foregroundColor(.nusBlue)
                 
                 Spacer()
                 
@@ -175,7 +179,7 @@ struct ReviewCard: View {
 
             Text(content)
                 .font(.body)
-                .foregroundColor(.secondary)
+                .foregroundColor(.black)
 
             Divider()
         }
