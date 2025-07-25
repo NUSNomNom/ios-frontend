@@ -40,42 +40,16 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                Image("nusNomNomLongLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 100)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 25)
+                NUSLogoHeader()
 
-                HStack(spacing: 12) {
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-
-                        TextField("Search stores...", text: $searchText)
-                            .autocapitalization(.none)
-                            .disableAutocorrection(true)
-                    }
-                    .padding(12)
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                    )
-
-                    Button(action: {
+                SearchBar(
+                    searchText: $searchText,
+                    placeholder: "Search stores...",
+                    showFilterButton: true,
+                    onFilterTap: {
                         isShowingFilterSheet = true
-                    }) {
-                        Image(systemName: "slider.horizontal.3")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(.blue)
-                            .padding(10)
-                            .background(Color(.secondarySystemBackground))
-                            .cornerRadius(10)
                     }
-                }
-                .padding(.horizontal)
+                )
             }
 
             ScrollView {
@@ -84,7 +58,7 @@ struct SearchView: View {
                         NavigationLink {
                             DetailedStoreView(store: pair.store)
                         } label: {
-                            storeCard(for: pair)
+                            StoreCard(store: pair.store, locationName: pair.locationName)
                         }
                     }
                 }
@@ -102,30 +76,6 @@ struct SearchView: View {
                 }
             }
         }
-    }
-
-    @ViewBuilder
-    private func storeCard(for pair: (store: Store, locationName: String)) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            RemoteImage(image_url: pair.store.imageUrl)
-                .scaledToFill()
-                .frame(width: 150, height: 150)
-                .clipped()
-                .cornerRadius(12)
-
-            Text(pair.store.name)
-                .foregroundColor(.black)
-                .font(.headline)
-                .lineLimit(1)
-
-            Text(pair.locationName)
-                .font(.caption)
-                .foregroundColor(.gray)
-        }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(radius: 4)
     }
 }
 

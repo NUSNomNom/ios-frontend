@@ -13,10 +13,7 @@ struct DetailedItemView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Image("nusNomNomLongLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 100)
+                NUSLogoHeader()
                 
                 RemoteImage(image_url: item.imageUrl)
                     .foregroundColor(.blue)
@@ -27,11 +24,12 @@ struct DetailedItemView: View {
                     .cornerRadius(12)
                 
                 VStack(alignment: .leading, spacing: 12) {
-                    Text(item.name)
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundColor(.nusBlue)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
+                    PageTitle(
+                        title: item.name,
+                        alignment: .leading
+                    )
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                     
                     Text(item.information)
                         .font(.headline)

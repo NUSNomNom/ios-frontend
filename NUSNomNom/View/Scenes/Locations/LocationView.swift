@@ -29,29 +29,12 @@ struct LocationView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image("nusNomNomLongLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 100)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 25)
+                NUSLogoHeader()
                 
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-
-                    TextField("Search locations...", text: $searchText)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                }
-                .padding(12)
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                SearchBar(
+                    searchText: $searchText,
+                    placeholder: "Search locations..."
                 )
-                .padding(.horizontal)
             }
             
             ScrollView {
@@ -60,22 +43,7 @@ struct LocationView: View {
                         NavigationLink {
                             DetailedLocationView(location: location)
                         } label: {
-                            VStack {
-                                RemoteImage(image_url: location.imageUrl)
-                                    .scaledToFill()
-                                    .frame(width: 150, height: 150)
-                                    .clipped()
-                                    .cornerRadius(12)
-
-                                Text(location.name)
-                                    .font(.headline)
-                                    .foregroundColor(.primary)
-                                    .padding(.top, 4)
-                            }
-                            .padding()
-                            .background(Color(.systemBackground))
-                            .cornerRadius(16)
-                            .shadow(radius: 4)
+                            LocationCard(location: location)
                         }
                     }
                 }

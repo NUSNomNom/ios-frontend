@@ -46,15 +46,9 @@ struct SettingView: View {
                                             .foregroundColor(.gray)
                                     }
 
-                                Button("Sign Out") {
+                                NUSOrangeButton(title: "Sign Out") {
                                     auth.logout()
                                 }
-                                .foregroundStyle(.white)
-                                .fontWeight(.bold)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(.nusOrange)
-                                .cornerRadius(12)
                             }
                         } else {
                             Image(systemName: "person.crop.circle.fill")
@@ -71,15 +65,9 @@ struct SettingView: View {
                                 .foregroundColor(.gray)
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 
-                            Button("Sign in with email") {
+                            PrimaryButton(title: "Sign in with email") {
                                 isShowingLogin = true
                             }
-                            .foregroundStyle(.white)
-                            .fontWeight(.bold)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(12)
                         }
                     }
 

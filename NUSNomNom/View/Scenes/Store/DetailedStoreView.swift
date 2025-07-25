@@ -23,18 +23,9 @@ struct DetailedStoreView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Image("nusNomNomLongLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 100)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 25)
+                NUSLogoHeader()
                 
-                Text(store.name)
-                    .font(.system(size: 40, weight: .bold))
-                    .foregroundColor(.nusBlue)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 26)
+                PageTitle(title: store.name)
                 
                 RemoteImage(image_url: store.imageUrl)
                     .scaledToFill()
@@ -54,28 +45,19 @@ struct DetailedStoreView: View {
                     switch selectedTab {
                     case .details:
                         VStack(spacing: 10) {
-                            Text("Information:")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.nusBlue)
+                            SectionTitle(title: "Information:")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(store.information)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            Text("Cuisine:")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.nusBlue)
+                            SectionTitle(title: "Cuisine:")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(store.cuisine)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            Text("Status:")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.nusBlue)
+                            SectionTitle(title: "Status:")
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             Text(store.isOpen ? "Open" : "Closed")
@@ -90,36 +72,7 @@ struct DetailedStoreView: View {
                                 NavigationLink {
                                     DetailedItemView(item: item)
                                 } label: {
-                                    HStack {
-                                        RemoteImage(image_url: item.imageUrl)
-                                            .scaledToFill()
-                                            .frame(width: 40, height: 40)
-                                            .padding(10)
-                                        
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text(item.name)
-                                                .font(.headline)
-                                                .foregroundColor(.black)
-                                            
-                                            Text(item.information)
-                                                .font(.subheadline)
-                                                .foregroundColor(.gray)
-                                                .lineLimit(1)
-                                            
-                                            Text(item.isAvailable ? "Available" : "Sold Out")
-                                                .font(.caption)
-                                                .foregroundColor(item.isAvailable ? .green : .red)
-                                        }
-                                        
-                                        Spacer()
-                                        
-                                        Image(systemName: "chevron.right")
-                                            .foregroundColor(.gray)
-                                    }
-                                    .padding()
-                                    .background(Color(.systemGray6))
-                                    .cornerRadius(12)
-                                    .padding(.horizontal)
+                                    ItemCard(item: item)
                                 }
                             }
                         }

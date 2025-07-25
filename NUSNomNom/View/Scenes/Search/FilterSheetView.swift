@@ -17,12 +17,11 @@ struct FilterSheetView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    
-
-                    Text("Filter by")
-                        .foregroundColor(.nusBlue)
-                        .font(.system(size: 40, weight: .heavy))
-                        .padding(.horizontal)
+                    PageTitle(
+                        title: "Filter by",
+                        alignment: .leading
+                    )
+                    .padding(.horizontal)
 
                     Divider()
                     
@@ -56,32 +55,16 @@ struct FilterSheetView: View {
 
                     Divider()
 
-                    Button(action: {
+                    NUSBlueButton(title: "Done") {
                         onDone()
-                    }) {
-                        Text("Done")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(.nusBlue)
-                            .cornerRadius(12)
-                            .padding(.horizontal)
                     }
+                    .padding(.horizontal)
                     
-                    Button(action: {
+                    NUSOrangeButton(title: "Reset Filters") {
                         selectedCuisines.removeAll()
                         showOnlyOpenStores = false
-                    }) {
-                        Text("Reset Filters")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(.nusOrange)
-                            .cornerRadius(12)
-                            .padding(.horizontal)
                     }
+                    .padding(.horizontal)
                     
                     Spacer(minLength: 40)
                 }
