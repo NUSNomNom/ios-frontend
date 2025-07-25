@@ -68,7 +68,6 @@ struct EmptyStateView: View {
     }
 }
 
-// MARK: - Previews
 #Preview("Loading View") {
     LoadingView(message: "Loading reviews...")
 }

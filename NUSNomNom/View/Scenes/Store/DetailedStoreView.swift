@@ -23,68 +23,101 @@ struct DetailedStoreView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                NUSLogoHeader()
+                headerSection
                 
-                PageTitle(title: store.name)
-                
-                RemoteImage(image_url: store.imageUrl)
-                    .scaledToFill()
-                    .frame(height: 200)
-                    .frame(maxWidth: .infinity)
-                    .clipped()
-                
-                VStack {
-                    Picker("Select Tab", selection: $selectedTab) {
-                        ForEach(Tab.allCases) { tab in
-                            Text(tab.rawValue).tag(tab)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(.horizontal)
-                    
-                    switch selectedTab {
-                    case .details:
-                        VStack(spacing: 10) {
-                            SectionTitle(title: "Information:")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Text(store.information)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            SectionTitle(title: "Cuisine:")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Text(store.cuisine)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            SectionTitle(title: "Status:")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Text(store.isOpen ? "Open" : "Closed")
-                                .foregroundColor(store.isOpen ? .green : .red)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                        }
-                        .padding()
-                    case .items:
-                        VStack(spacing: 12) {
-                            ForEach(store.items) { item in
-                                NavigationLink {
-                                    DetailedItemView(item: item)
-                                } label: {
-                                    ItemCard(item: item)
-                                }
-                            }
-                        }
-                    case .reviews:
-                        StoreReviewsView(store: store)
-                    }
-                }
-                .padding(.bottom)
+                tabSection
             }
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 20) {
+            NUSLogoHeader()
+            
+            PageTitle(title: store.name)
+            
+            RemoteImage(image_url: store.imageUrl)
+                .scaledToFill()
+                .frame(height: 200)
+                .frame(maxWidth: .infinity)
+                .clipped()
+        }
+    }
+    
+    private var tabSection: some View {
+        VStack {
+            tabPicker
+            
+            selectedTabContent
+        }
+        .padding(.bottom)
+    }
+    
+    private var tabPicker: some View {
+        Picker("Select Tab", selection: $selectedTab) {
+            ForEach(Tab.allCases) { tab in
+                Text(tab.rawValue).tag(tab)
+            }
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal)
+    }
+    
+    private var selectedTabContent: some View {
+        Group {
+            switch selectedTab {
+            case .details:
+                detailsTabContent
+            case .items:
+                itemsTabContent
+            case .reviews:
+                StoreReviewsView(store: store)
+            }
+        }
+    }
+    
+    private var detailsTabContent: some View {
+        VStack(spacing: 10) {
+            storeInfoRow(title: "Information:", value: store.information)
+            storeInfoRow(title: "Cuisine:", value: store.cuisine)
+            storeStatusRow()
+        }
+        .padding()
+    }
+    
+    private func storeInfoRow(title: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            SectionTitle(title: title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text(value)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    private func storeStatusRow() -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            SectionTitle(title: "Status:")
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text(store.isOpen ? "Open" : "Closed")
+                .foregroundColor(store.isOpen ? .green : .red)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    private var itemsTabContent: some View {
+        VStack(spacing: 12) {
+            ForEach(store.items) { item in
+                NavigationLink {
+                    DetailedItemView(item: item)
+                } label: {
+                    ItemCard(item: item)
+                }
+            }
+        }
     }
 }
 

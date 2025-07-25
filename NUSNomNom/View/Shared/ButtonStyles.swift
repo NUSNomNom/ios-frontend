@@ -145,7 +145,6 @@ struct NUSOrangeButton: View {
     }
 }
 
-// MARK: - Previews
 #Preview {
     VStack(spacing: 16) {
         PrimaryButton(title: "Primary Button") {}

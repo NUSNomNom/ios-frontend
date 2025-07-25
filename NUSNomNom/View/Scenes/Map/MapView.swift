@@ -27,24 +27,28 @@ struct MapView: View {
     
     var body: some View {
         NavigationStack {
-            Map(position: $mapPosition, selection: $selectedLocation) {
-                UserAnnotation()
-                
-                ForEach(dataManager.locations) { location in
-                    Marker(
-                        location.name,
-                        coordinate: location.asCoord(),
-                    ).tag(location)
+            mapContent
+                .navigationDestination(item: $selectedLocation) { location in
+                    DetailedLocationView(location: location)
                 }
+                .toolbar(.hidden, for: .navigationBar)
+        }
+    }
+    
+    private var mapContent: some View {
+        Map(position: $mapPosition, selection: $selectedLocation) {
+            UserAnnotation()
+            
+            ForEach(dataManager.locations) { location in
+                Marker(
+                    location.name,
+                    coordinate: location.asCoord()
+                ).tag(location)
             }
-            .mapControls {
-                MapCompass()
-                MapScaleView()
-            }
-            .navigationDestination(item: $selectedLocation) { location in
-                DetailedLocationView(location: location)
-            }
-            .toolbar(.hidden, for: .navigationBar)
+        }
+        .mapControls {
+            MapCompass()
+            MapScaleView()
         }
     }
 }

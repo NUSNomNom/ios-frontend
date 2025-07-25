@@ -24,96 +24,131 @@ struct DetailedLocationView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                NUSLogoHeader()
-
-                PageTitle(title: location.name)
-                .padding(.horizontal)
-
-                RemoteImage(image_url: location.imageUrl)
-                    .scaledToFill()
-                    .frame(height: 200)
-                    .frame(maxWidth: .infinity)
-                    .clipped()
-
-                Picker("Select Tab", selection: $selectedTab) {
-                    ForEach(Tab.allCases) { tab in
-                        Text(tab.rawValue).tag(tab)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.horizontal)
-
-                switch selectedTab {
-                case .stores:
-                    SectionTitle(title: "Stores")
-                        .padding(.horizontal)
-                        .padding(.leading)
-
-                    ForEach(location.stores) { store in
-                        NavigationLink {
-                            DetailedStoreView(store: store)
-                        } label: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(store.name)
-                                        .font(.headline)
-                                        .foregroundColor(.black)
-
-                                    Text(store.cuisine)
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-
-                                    Text(store.isOpen ? "Open" : "Closed")
-                                        .font(.caption)
-                                        .foregroundColor(store.isOpen ? .green : .red)
-                                }
-
-                                Spacer()
-
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
-                            }
-                            .padding()
-                            .background(Color(.systemGray6))
-                            .cornerRadius(12)
-                        }
-                        .padding(.horizontal)
-                    }
-
-                case .directions:
-                    SectionTitle(title: "Directions")
-                        .padding(.leading)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    RouteMapView(destination: location.asCoord()) { steps in
-                        self.directionSteps = steps
-                    }
-                    .frame(height: 300)
-                    .cornerRadius(12)
-                    .padding(.horizontal)
-                    
-                    if !directionSteps.isEmpty {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Steps")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .padding(.leading)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            ForEach(directionSteps, id: \.self) { step in
-                                Text("• \(step)")
-                                    .font(.subheadline)
-                                    .padding(.horizontal)
-                            }
-                        }
-                        .padding(.top)
-                    }
-                }
+                headerSection
+                
+                tabPicker
+                
+                selectedTabContent
             }
             .padding(.top)
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            NUSLogoHeader()
+
+            PageTitle(title: location.name)
+                .padding(.horizontal)
+
+            RemoteImage(image_url: location.imageUrl)
+                .scaledToFill()
+                .frame(height: 200)
+                .frame(maxWidth: .infinity)
+                .clipped()
+        }
+    }
+    
+    private var tabPicker: some View {
+        Picker("Select Tab", selection: $selectedTab) {
+            ForEach(Tab.allCases) { tab in
+                Text(tab.rawValue).tag(tab)
+            }
+        }
+        .pickerStyle(SegmentedPickerStyle())
+        .padding(.horizontal)
+    }
+    
+    private var selectedTabContent: some View {
+        Group {
+            switch selectedTab {
+            case .stores:
+                storesTabContent
+            case .directions:
+                directionsTabContent
+            }
+        }
+    }
+    
+    private var storesTabContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SectionTitle(title: "Stores")
+                .padding(.horizontal)
+                .padding(.leading)
+
+            ForEach(location.stores) { store in
+                storeRow(store)
+            }
+        }
+    }
+    
+    private func storeRow(_ store: Store) -> some View {
+        NavigationLink {
+            DetailedStoreView(store: store)
+        } label: {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(store.name)
+                        .font(.headline)
+                        .foregroundColor(.black)
+
+                    Text(store.cuisine)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+
+                    Text(store.isOpen ? "Open" : "Closed")
+                        .font(.caption)
+                        .foregroundColor(store.isOpen ? .green : .red)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.gray)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(12)
+        }
+        .padding(.horizontal)
+    }
+    
+    private var directionsTabContent: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            SectionTitle(title: "Directions")
+                .padding(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            RouteMapView(destination: location.asCoord()) { steps in
+                self.directionSteps = steps
+            }
+            .frame(height: 300)
+            .cornerRadius(12)
+            .padding(.horizontal)
+            
+            if !directionSteps.isEmpty {
+                stepsList
+            }
+        }
+    }
+    
+    private var stepsList: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Steps")
+                .font(.title)
+                .fontWeight(.bold)
+                .padding(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            ForEach(directionSteps, id: \.self) { step in
+                Text("• \(step)")
+                    .font(.subheadline)
+                    .padding(.horizontal)
+            }
+        }
+        .padding(.top)
     }
 }
 

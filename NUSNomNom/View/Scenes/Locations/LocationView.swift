@@ -29,29 +29,45 @@ struct LocationView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                NUSLogoHeader()
-                
-                SearchBar(
-                    searchText: $searchText,
-                    placeholder: "Search locations..."
-                )
+                headerSection
             }
             
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(filteredLocations) { location in
-                        NavigationLink {
-                            DetailedLocationView(location: location)
-                        } label: {
-                            LocationCard(location: location)
-                        }
+            contentSection
+            
+            navigationConfiguration
+        }
+    }
+    
+    private var headerSection: some View {
+        VStack {
+            NUSLogoHeader()
+            
+            SearchBar(
+                searchText: $searchText,
+                placeholder: "Search locations..."
+            )
+        }
+    }
+    
+    private var contentSection: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(filteredLocations) { location in
+                    NavigationLink {
+                        DetailedLocationView(location: location)
+                    } label: {
+                        LocationCard(location: location)
                     }
                 }
-                .padding()
             }
+            .padding()
+        }
+    }
+    
+    private var navigationConfiguration: some View {
+        EmptyView()
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("")
-        }
     }
 }
 

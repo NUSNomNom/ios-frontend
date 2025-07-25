@@ -20,49 +20,11 @@ struct StoreReviewsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("Reviews for \(store.name)")
-                .font(.title)
-                .fontWeight(.bold)
-                .foregroundColor(.nusBlue)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .lineLimit(1)
-
-            Text("⭐️ \(String(format: "%.1f", averageRating)) · Based on \(reviews.count) review\(reviews.count == 1 ? "" : "s")")
-                .font(.title3)
-
-            Divider()
-
-            if isLoadingReviews {
-                LoadingView(message: "Loading reviews...")
-            } else if reviews.isEmpty {
-                EmptyStateView(
-                    title: "No reviews yet",
-                    subtitle: "Be the first to leave a review!",
-                    systemImage: "star"
-                )
-            } else {
-                VStack(alignment: .leading, spacing: 12) {
-                    ForEach(reviews) { review in
-                        ReviewCard(
-                            author: usernames[review.nomerId] ?? "Loading...",
-                            content: review.comment,
-                            rating: review.score,
-                            createdAt: review.createdAt
-                        )
-                    }
-                }
-            }
-
-            if auth.isLoggedIn {
-                NUSBlueButton(title: "Leave a Review") {
-                    showReviewSheet = true
-                }
-                .padding(.top)
-            } else {
-                NUSOrangeButton(title: "Login to Leave a Review") {
-                    isShowingLogin = true
-                }
-            }
+            headerSection
+            
+            reviewsContent
+            
+            actionButton
         }
         .padding()
         .onAppear {
@@ -79,6 +41,66 @@ struct StoreReviewsView: View {
         }
         .alert("Login Successful", isPresented: $showLoginSuccessAlert) {
             Button("OK", role: .cancel) {}
+        }
+    }
+    
+    private var headerSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Reviews for \(store.name)")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.nusBlue)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .lineLimit(1)
+
+            Text("⭐️ \(String(format: "%.1f", averageRating)) · Based on \(reviews.count) review\(reviews.count == 1 ? "" : "s")")
+                .font(.title3)
+
+            Divider()
+        }
+    }
+    
+    private var reviewsContent: some View {
+        Group {
+            if isLoadingReviews {
+                LoadingView(message: "Loading reviews...")
+            } else if reviews.isEmpty {
+                EmptyStateView(
+                    title: "No reviews yet",
+                    subtitle: "Be the first to leave a review!",
+                    systemImage: "star"
+                )
+            } else {
+                reviewsList
+            }
+        }
+    }
+    
+    private var reviewsList: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            ForEach(reviews) { review in
+                ReviewCard(
+                    author: usernames[review.nomerId] ?? "Loading...",
+                    content: review.comment,
+                    rating: review.score,
+                    createdAt: review.createdAt
+                )
+            }
+        }
+    }
+    
+    private var actionButton: some View {
+        Group {
+            if auth.isLoggedIn {
+                NUSBlueButton(title: "Leave a Review") {
+                    showReviewSheet = true
+                }
+                .padding(.top)
+            } else {
+                NUSOrangeButton(title: "Login to Leave a Review") {
+                    isShowingLogin = true
+                }
+            }
         }
     }
     
