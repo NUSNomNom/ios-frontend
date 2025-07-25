@@ -33,13 +33,35 @@ struct RegisterView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        
         VStack(spacing: 20) {
+            headerSection
             
+            formSection
+            
+            registerButton
+            
+            Spacer()
+        }
+        .padding(.top)
+        .alert("Registration Error", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(alertMessage ?? "Unknown error occurred")
+        }
+    }
+    
+    private var headerSection: some View {
+        VStack(spacing: 20) {
             CancelNavigationHeader {
                 dismiss()
             }
             
+            welcomeSection
+        }
+    }
+    
+    private var welcomeSection: some View {
+        VStack(spacing: 16) {
             Image(systemName: "envelope")
                 .resizable()
                 .scaledToFit()
@@ -57,62 +79,69 @@ struct RegisterView: View {
                 .font(.subheadline)
                 .bold()
                 .foregroundColor(.gray)
-            
-            Group {
-                StyledTextField(
-                    placeholder: "Display Name",
-                    text: $inputDisplayName
-                )
-                StyledTextField(
-                    placeholder: "Email Address",
-                    text: $inputEmail,
-                    keyboardType: .emailAddress,
-                    autocapitalization: .never
-                )
-                StyledSecureField(
-                    placeholder: "Password",
-                    text: $inputPassword
-                )
-                StyledSecureField(
-                    placeholder: "Confirm Password",
-                    text: $inputConfirmPassword
-                )
-            }
-            .padding(.horizontal)
-            
-            PrimaryButton(
-                title: "Register",
-                isDisabled: inputDisplayName.isEmpty || inputEmail.isEmpty || inputPassword.isEmpty || inputConfirmPassword.isEmpty
-            ) {
-                if let error = validateInputs() {
-                    alertMessage = error
-                    showErrorAlert = true
-                    return
-                }
-                
-                Task {
-                    do {
-                        try await auth.register(displayName: inputDisplayName, email: inputEmail, password: inputPassword)
-                        registerSuccess = true
-                    } catch {
-                        alertMessage = error.localizedDescription
-                        showErrorAlert = true
-                    }
-                }
-            }
-            .padding(.horizontal)
-            
-            Spacer()
         }
-        .padding(.top)
-        
-        .alert(
-            "Registration Error",
-            isPresented: $showErrorAlert,
+    }
+    
+    private var formSection: some View {
+        Group {
+            StyledTextField(
+                placeholder: "Display Name",
+                text: $inputDisplayName
+            )
+            StyledTextField(
+                placeholder: "Email Address",
+                text: $inputEmail,
+                keyboardType: .emailAddress,
+                autocapitalization: .never
+            )
+            StyledSecureField(
+                placeholder: "Password",
+                text: $inputPassword
+            )
+            StyledSecureField(
+                placeholder: "Confirm Password",
+                text: $inputConfirmPassword
+            )
+        }
+        .padding(.horizontal)
+    }
+    
+    private var registerButton: some View {
+        PrimaryButton(
+            title: "Register",
+            isDisabled: !isFormValid
         ) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(alertMessage ?? "Unknown error occurred")
+            handleRegistration()
+        }
+        .padding(.horizontal)
+    }
+    
+    private var isFormValid: Bool {
+        !inputDisplayName.isEmpty && 
+        !inputEmail.isEmpty && 
+        !inputPassword.isEmpty && 
+        !inputConfirmPassword.isEmpty
+    }
+    
+    private func handleRegistration() {
+        if let error = validateInputs() {
+            alertMessage = error
+            showErrorAlert = true
+            return
+        }
+        
+        Task {
+            do {
+                try await auth.register(
+                    displayName: inputDisplayName,
+                    email: inputEmail,
+                    password: inputPassword
+                )
+                registerSuccess = true
+            } catch {
+                alertMessage = error.localizedDescription
+                showErrorAlert = true
+            }
         }
     }
     

@@ -13,51 +13,69 @@ struct DetailedItemView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                NUSLogoHeader()
+                headerSection
                 
-                RemoteImage(image_url: item.imageUrl)
-                    .foregroundColor(.blue)
-                    .scaledToFit()
-                    .frame(height: 290)
-                    .frame(maxWidth: .infinity)
-                    .clipped()
-                    .cornerRadius(12)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    PageTitle(
-                        title: item.name,
-                        alignment: .leading
-                    )
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    
-                    Text(item.information)
-                        .font(.headline)
-                        .foregroundColor(.black)
-                        .fixedSize(horizontal: false, vertical: true)
-                    
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("Price:")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Text(String(format: "$%.2f", item.price.doubleValue))
-                            .font(.subheadline)
-                    }
-                    
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("Availability:")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Text(item.isAvailable ? "Available" : "Sold Out")
-                            .font(.subheadline)
-                            .foregroundColor(item.isAvailable ? .green : .red)
-                    }
-                }
+                itemDetailsSection
             }
             .padding(.horizontal)
             .padding(.top)
         }
         .ignoresSafeArea(.container, edges: .bottom)
+    }
+    
+    private var headerSection: some View {
+        VStack(spacing: 16) {
+            NUSLogoHeader()
+            
+            RemoteImage(image_url: item.imageUrl)
+                .foregroundColor(.blue)
+                .scaledToFit()
+                .frame(height: 290)
+                .frame(maxWidth: .infinity)
+                .clipped()
+                .cornerRadius(12)
+        }
+    }
+    
+    private var itemDetailsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            PageTitle(
+                title: item.name,
+                alignment: .leading
+            )
+            .lineLimit(1)
+            .truncationMode(.tail)
+            
+            Text(item.information)
+                .font(.headline)
+                .foregroundColor(.black)
+                .fixedSize(horizontal: false, vertical: true)
+            
+            priceInfo
+            
+            availabilityInfo
+        }
+    }
+    
+    private var priceInfo: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("Price:")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+            Text(String(format: "$%.2f", item.price.doubleValue))
+                .font(.subheadline)
+        }
+    }
+    
+    private var availabilityInfo: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text("Availability:")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+            Text(item.isAvailable ? "Available" : "Sold Out")
+                .font(.subheadline)
+                .foregroundColor(item.isAvailable ? .green : .red)
+        }
     }
 }
 

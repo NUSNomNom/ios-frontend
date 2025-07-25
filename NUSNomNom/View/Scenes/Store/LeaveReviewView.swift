@@ -24,39 +24,13 @@ struct LeaveReviewView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    CancelNavigationHeader {
-                        dismiss()
-                    }
+                    headerSection
                     
-                    PageTitle(
-                        title: "Leave a Review for \(store.name)",
-                        alignment: .center
-                    )
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Your Rating")
-                            .font(.headline)
-
-                        RatingStars(rating: $rating)
-                    }
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Your Review")
-                            .font(.headline)
-
-                        StyledTextEditor(
-                            text: $content,
-                            placeholder: "Enter your review here..."
-                        )
-                    }
-
-                    NUSBlueButton(
-                        title: "Submit Review",
-                        isDisabled: content.trimmingCharacters(in: .whitespaces).isEmpty || rating == 0,
-                        isLoading: isSubmitting
-                    ) {
-                        submitReview()
-                    }
+                    ratingSection
+                    
+                    reviewSection
+                    
+                    submitButton
                 }
                 .padding()
             }
@@ -68,6 +42,54 @@ struct LeaveReviewView: View {
                 Text(alertMessage)
             }
         }
+    }
+    
+    private var headerSection: some View {
+        VStack(spacing: 16) {
+            CancelNavigationHeader {
+                dismiss()
+            }
+            
+            PageTitle(
+                title: "Leave a Review for \(store.name)",
+                alignment: .center
+            )
+        }
+    }
+    
+    private var ratingSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Your Rating")
+                .font(.headline)
+
+            RatingStars(rating: $rating)
+        }
+    }
+    
+    private var reviewSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Your Review")
+                .font(.headline)
+
+            StyledTextEditor(
+                text: $content,
+                placeholder: "Enter your review here..."
+            )
+        }
+    }
+    
+    private var submitButton: some View {
+        NUSBlueButton(
+            title: "Submit Review",
+            isDisabled: !isFormValid,
+            isLoading: isSubmitting
+        ) {
+            submitReview()
+        }
+    }
+    
+    private var isFormValid: Bool {
+        !content.trimmingCharacters(in: .whitespaces).isEmpty && rating > 0
     }
     
     private func submitReview() {

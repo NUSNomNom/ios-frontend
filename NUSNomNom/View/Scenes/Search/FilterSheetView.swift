@@ -17,54 +17,13 @@ struct FilterSheetView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    PageTitle(
-                        title: "Filter by",
-                        alignment: .leading
-                    )
-                    .padding(.horizontal)
-
-                    Divider()
+                    headerSection
                     
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Cuisine")
-                            .font(.title3)
-                            .fontWeight(.medium)
-                            .padding(.horizontal)
-
-                        ForEach(allCuisines, id: \.self) { cuisine in
-                            MultipleSelectionRow(
-                                title: cuisine,
-                                isSelected: selectedCuisines.contains(cuisine)
-                            ) {
-                                if selectedCuisines.contains(cuisine) {
-                                    selectedCuisines.remove(cuisine)
-                                } else {
-                                    selectedCuisines.insert(cuisine)
-                                }
-                            }
-                            .padding(.horizontal)
-                        }
-                    }
-
-                    Divider()
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Toggle("Only show open stores", isOn: $showOnlyOpenStores)
-                            .padding(.horizontal)
-                    }
-
-                    Divider()
-
-                    NUSBlueButton(title: "Done") {
-                        onDone()
-                    }
-                    .padding(.horizontal)
+                    cuisineSection
                     
-                    NUSOrangeButton(title: "Reset Filters") {
-                        selectedCuisines.removeAll()
-                        showOnlyOpenStores = false
-                    }
-                    .padding(.horizontal)
+                    storeStatusSection
+                    
+                    actionButtons
                     
                     Spacer(minLength: 40)
                 }
@@ -73,6 +32,75 @@ struct FilterSheetView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
         }
+    }
+    
+    private var headerSection: some View {
+        VStack {
+            PageTitle(
+                title: "Filter by",
+                alignment: .leading
+            )
+            .padding(.horizontal)
+
+            Divider()
+        }
+    }
+    
+    private var cuisineSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Cuisine")
+                .font(.title3)
+                .fontWeight(.medium)
+                .padding(.horizontal)
+
+            ForEach(allCuisines, id: \.self) { cuisine in
+                MultipleSelectionRow(
+                    title: cuisine,
+                    isSelected: selectedCuisines.contains(cuisine)
+                ) {
+                    toggleCuisineSelection(cuisine)
+                }
+                .padding(.horizontal)
+            }
+            
+            Divider()
+        }
+    }
+    
+    private var storeStatusSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Toggle("Only show open stores", isOn: $showOnlyOpenStores)
+                .padding(.horizontal)
+            
+            Divider()
+        }
+    }
+    
+    private var actionButtons: some View {
+        VStack(spacing: 16) {
+            NUSBlueButton(title: "Done") {
+                onDone()
+            }
+            .padding(.horizontal)
+            
+            NUSOrangeButton(title: "Reset Filters") {
+                resetFilters()
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    private func toggleCuisineSelection(_ cuisine: String) {
+        if selectedCuisines.contains(cuisine) {
+            selectedCuisines.remove(cuisine)
+        } else {
+            selectedCuisines.insert(cuisine)
+        }
+    }
+    
+    private func resetFilters() {
+        selectedCuisines.removeAll()
+        showOnlyOpenStores = false
     }
 }
 

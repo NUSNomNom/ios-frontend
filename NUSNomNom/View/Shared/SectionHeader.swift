@@ -50,7 +50,6 @@ struct SectionTitle: View {
     }
 }
 
-// MARK: - Previews
 #Preview {
     VStack(spacing: 16) {
         SectionHeader(title: "Information")

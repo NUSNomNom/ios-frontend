@@ -51,7 +51,6 @@ struct PageTitle: View {
     }
 }
 
-// MARK: - Previews
 #Preview {
     VStack(spacing: 20) {
         CancelNavigationHeader {

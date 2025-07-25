@@ -82,7 +82,6 @@ struct StyledTextEditor: View {
     }
 }
 
-// MARK: - Previews
 #Preview {
     VStack(spacing: 16) {
         StyledTextField(

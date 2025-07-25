@@ -40,30 +40,47 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                NUSLogoHeader()
-
-                SearchBar(
-                    searchText: $searchText,
-                    placeholder: "Search stores...",
-                    showFilterButton: true,
-                    onFilterTap: {
-                        isShowingFilterSheet = true
-                    }
-                )
+                headerSection
             }
 
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(filteredStores, id: \.store.id) { pair in
-                        NavigationLink {
-                            DetailedStoreView(store: pair.store)
-                        } label: {
-                            StoreCard(store: pair.store, locationName: pair.locationName)
-                        }
+            contentSection
+            
+            navigationAndSheets
+        }
+    }
+    
+    private var headerSection: some View {
+        VStack(alignment: .leading) {
+            NUSLogoHeader()
+
+            SearchBar(
+                searchText: $searchText,
+                placeholder: "Search stores...",
+                showFilterButton: true,
+                onFilterTap: {
+                    isShowingFilterSheet = true
+                }
+            )
+        }
+    }
+    
+    private var contentSection: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(filteredStores, id: \.store.id) { pair in
+                    NavigationLink {
+                        DetailedStoreView(store: pair.store)
+                    } label: {
+                        StoreCard(store: pair.store, locationName: pair.locationName)
                     }
                 }
-                .padding()
             }
+            .padding()
+        }
+    }
+    
+    private var navigationAndSheets: some View {
+        EmptyView()
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $isShowingFilterSheet) {
@@ -75,7 +92,6 @@ struct SearchView: View {
                     isShowingFilterSheet = false
                 }
             }
-        }
     }
 }
 
