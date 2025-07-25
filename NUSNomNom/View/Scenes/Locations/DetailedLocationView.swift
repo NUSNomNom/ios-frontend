@@ -24,17 +24,10 @@ struct DetailedLocationView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Image("nusNomNomLongLogo")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 100)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 25)
+                NUSLogoHeader()
 
-                Text(location.name)
-                    .font(.system(size: 40, weight: .bold))
-                    .foregroundColor(.nusBlue)
-                    .padding(.horizontal)
+                PageTitle(title: location.name)
+                .padding(.horizontal)
 
                 RemoteImage(image_url: location.imageUrl)
                     .scaledToFill()
@@ -52,10 +45,7 @@ struct DetailedLocationView: View {
 
                 switch selectedTab {
                 case .stores:
-                    Text("Stores")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.nusBlue)
+                    SectionTitle(title: "Stores")
                         .padding(.horizontal)
                         .padding(.leading)
 
@@ -91,11 +81,9 @@ struct DetailedLocationView: View {
                     }
 
                 case .directions:
-                    Text("Directions")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .foregroundColor(.nusBlue)
+                    SectionTitle(title: "Directions")
                         .padding(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
                     RouteMapView(destination: location.asCoord()) { steps in
                         self.directionSteps = steps

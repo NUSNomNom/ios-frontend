@@ -33,25 +33,13 @@ struct StoreReviewsView: View {
             Divider()
 
             if isLoadingReviews {
-                HStack {
-                    Spacer()
-                    ProgressView("Loading reviews...")
-                    Spacer()
-                }
-                .padding()
+                LoadingView(message: "Loading reviews...")
             } else if reviews.isEmpty {
-                VStack {
-                    Text("No reviews yet")
-                        .font(.headline)
-                        .frame(alignment: .leading)
-                        .foregroundColor(.secondary)
-                    Text("Be the first to leave a review!")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                
-                .padding()
+                EmptyStateView(
+                    title: "No reviews yet",
+                    subtitle: "Be the first to leave a review!",
+                    systemImage: "star"
+                )
             } else {
                 VStack(alignment: .leading, spacing: 12) {
                     ForEach(reviews) { review in
@@ -66,31 +54,14 @@ struct StoreReviewsView: View {
             }
 
             if auth.isLoggedIn {
-                Button(action: {
+                NUSBlueButton(title: "Leave a Review") {
                     showReviewSheet = true
-                }) {
-                    HStack {
-                        Image(systemName: "square.and.pencil")
-                        Text("Leave a Review")
-                    }
-                    .foregroundStyle(.white)
-                    .fontWeight(.bold)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.nusBlue)
-                    .cornerRadius(12)
                 }
                 .padding(.top)
             } else {
-                Button("Login to Leave a Review") {
+                NUSOrangeButton(title: "Login to Leave a Review") {
                     isShowingLogin = true
                 }
-                .foregroundStyle(.white)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(.nusOrange)
-                .cornerRadius(12)
             }
         }
         .padding()
@@ -140,49 +111,6 @@ struct StoreReviewsView: View {
         }
         
         isLoadingReviews = false
-    }
-}
-
-struct ReviewCard: View {
-    let author: String
-    let content: String
-    let rating: Int
-    let createdAt: Date
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(author)
-                    .font(.headline)
-                    .foregroundColor(.nusBlue)
-                
-                Spacer()
-                
-                Text(createdAt, style: .date)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            HStack(spacing: 2) {
-                ForEach(0..<rating, id: \.self) { _ in
-                    Image(systemName: "star.fill")
-                        .foregroundColor(.yellow)
-                        .font(.caption)
-                }
-                
-                ForEach(rating..<5, id: \.self) { _ in
-                    Image(systemName: "star")
-                        .foregroundColor(.gray)
-                        .font(.caption)
-                }
-            }
-
-            Text(content)
-                .font(.body)
-                .foregroundColor(.black)
-
-            Divider()
-        }
     }
 }
 

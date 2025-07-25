@@ -36,14 +36,8 @@ struct RegisterView: View {
         
         VStack(spacing: 20) {
             
-            HStack {
-                Spacer()
-                Button("Cancel") {
-                    dismiss()
-                }
-                .foregroundColor(.blue)
-                .fontWeight(.bold)
-                .padding(.trailing)
+            CancelNavigationHeader {
+                dismiss()
             }
             
             Image(systemName: "envelope")
@@ -65,20 +59,31 @@ struct RegisterView: View {
                 .foregroundColor(.gray)
             
             Group {
-                TextField("Display Name", text: $inputDisplayName)
-                TextField("Email Address", text: $inputEmail)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
-                SecureField("Password", text: $inputPassword)
-                SecureField("Confirm Password", text: $inputConfirmPassword)
+                StyledTextField(
+                    placeholder: "Display Name",
+                    text: $inputDisplayName
+                )
+                StyledTextField(
+                    placeholder: "Email Address",
+                    text: $inputEmail,
+                    keyboardType: .emailAddress,
+                    autocapitalization: .never
+                )
+                StyledSecureField(
+                    placeholder: "Password",
+                    text: $inputPassword
+                )
+                StyledSecureField(
+                    placeholder: "Confirm Password",
+                    text: $inputConfirmPassword
+                )
             }
-            .padding()
-            .background(Color(.secondarySystemBackground))
-            .cornerRadius(12)
             .padding(.horizontal)
             
-            Button("Register") {
-                
+            PrimaryButton(
+                title: "Register",
+                isDisabled: inputDisplayName.isEmpty || inputEmail.isEmpty || inputPassword.isEmpty || inputConfirmPassword.isEmpty
+            ) {
                 if let error = validateInputs() {
                     alertMessage = error
                     showErrorAlert = true
@@ -95,14 +100,7 @@ struct RegisterView: View {
                     }
                 }
             }
-            .foregroundColor(.white)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.blue)
-            .fontWeight(.bold)
-            .cornerRadius(12)
             .padding(.horizontal)
-            .disabled(inputDisplayName.isEmpty || inputEmail.isEmpty || inputPassword.isEmpty || inputConfirmPassword.isEmpty)
             
             Spacer()
         }

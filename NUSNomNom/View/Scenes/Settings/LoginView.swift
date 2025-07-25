@@ -27,16 +27,9 @@ struct LoginView: View {
         
         VStack(spacing: 20) {
             
-            HStack {
-                Spacer()
-                Button("Cancel") {
-                    dismiss()
-                }
-                .foregroundColor(.blue)
-                .fontWeight(.bold)
-                .padding(.trailing)
+            CancelNavigationHeader {
+                dismiss()
             }
-            .padding(.bottom, 40)
             
             Text("Welcome to")
                 .font(.title)
@@ -57,18 +50,22 @@ struct LoginView: View {
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.center)
             
-            TextField("Email", text: $inputEmail)
-                .autocapitalization(.none)
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
+            StyledTextField(
+                placeholder: "Email",
+                text: $inputEmail,
+                keyboardType: .emailAddress,
+                autocapitalization: .never
+            )
             
-            SecureField("Password", text: $inputPassword)
-                .padding()
-                .background(Color(.secondarySystemBackground))
-                .cornerRadius(12)
+            StyledSecureField(
+                placeholder: "Password",
+                text: $inputPassword
+            )
             
-            Button("Login") {
+            PrimaryButton(
+                title: "Login",
+                isDisabled: inputEmail.isEmpty || inputPassword.isEmpty
+            ) {
                 Task {
                     do {
                         try await auth.login(as: inputEmail, with: inputPassword)
@@ -79,24 +76,10 @@ struct LoginView: View {
                     }
                 }
             }
-            .foregroundStyle(.white)
-            .fontWeight(.bold)
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.blue)
-            .cornerRadius(12)
-            .disabled(inputEmail.isEmpty || inputPassword.isEmpty)
             
-            
-            Button("Register") {
+            SecondaryButton(title: "Register") {
                 showRegisterView = true
             }
-            .foregroundStyle(.white)
-            .fontWeight(.bold)
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.orange)
-            .cornerRadius(12)
             
         }
         .padding()

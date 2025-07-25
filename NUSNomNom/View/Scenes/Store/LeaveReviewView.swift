@@ -24,81 +24,39 @@ struct LeaveReviewView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    HStack {
-                        Spacer()
-                        Button("Cancel") {
-                            dismiss()
-                        }
-                        .foregroundColor(.blue)
-                        .fontWeight(.bold)
-                        .padding(.trailing)
+                    CancelNavigationHeader {
+                        dismiss()
                     }
-                    .padding(.bottom, 40)
                     
-                    Text("Leave a Review for \(store.name)")
-                        .font(.system(size: 40, weight: .bold))
-                        .foregroundColor(.nusBlue)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
+                    PageTitle(
+                        title: "Leave a Review for \(store.name)",
+                        alignment: .center
+                    )
 
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Your Rating")
                             .font(.headline)
 
-                        HStack(spacing: 8) {
-                            ForEach(1..<6) { star in
-                                Image(systemName: star <= rating ? "star.fill" : "star")
-                                    .resizable()
-                                    .frame(width: 28, height: 28)
-                                    .foregroundColor(.yellow)
-                                    .onTapGesture {
-                                        rating = star
-                                    }
-                            }
-                        }
+                        RatingStars(rating: $rating)
                     }
 
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Your Review")
                             .font(.headline)
 
-                        ZStack(alignment: .topLeading) {
-                            if content.isEmpty {
-                                Text("Enter your review here...")
-                                    .foregroundColor(.gray)
-                                    .padding(.top, 8)
-                                    .padding(.leading, 5)
-                            }
-
-                            TextEditor(text: $content)
-                                .frame(height: 120)
-                                .padding(4)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.gray.opacity(0.3))
-                                )
-                        }
+                        StyledTextEditor(
+                            text: $content,
+                            placeholder: "Enter your review here..."
+                        )
                     }
 
-                    Button("Submit Review") {
+                    NUSBlueButton(
+                        title: "Submit Review",
+                        isDisabled: content.trimmingCharacters(in: .whitespaces).isEmpty || rating == 0,
+                        isLoading: isSubmitting
+                    ) {
                         submitReview()
                     }
-                    .disabled(content.trimmingCharacters(in: .whitespaces).isEmpty || rating == 0 || isSubmitting)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background((content.trimmingCharacters(in: .whitespaces).isEmpty || rating == 0 || isSubmitting) ? Color.gray : .nusBlue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-                    .fontWeight(.bold)
-                    .overlay(
-                        Group {
-                            if isSubmitting {
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                                    .scaleEffect(0.8)
-                            }
-                        }
-                    )
                 }
                 .padding()
             }
