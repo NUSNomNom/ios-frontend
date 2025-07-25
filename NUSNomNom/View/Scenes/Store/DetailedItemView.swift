@@ -39,12 +39,11 @@ struct DetailedItemView: View {
     
     private var itemDetailsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            PageTitle(
-                title: item.name,
-                alignment: .leading
-            )
-            .lineLimit(1)
-            .truncationMode(.tail)
+            Text(item.name)
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.nusBlue)
+                .multilineTextAlignment(.leading)
             
             Text(item.information)
                 .font(.headline)
