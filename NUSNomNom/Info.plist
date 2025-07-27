@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>API_URL</key>
-	<string>https://nomnom-t9kyp.ondigitalocean.app</string>
+	<string>https://nomnom.nutabi.me</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>NUSNomNom needs access to your location to show nearby dining options and provide directions.</string>
 </dict>
