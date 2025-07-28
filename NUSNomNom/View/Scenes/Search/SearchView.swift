@@ -41,11 +41,20 @@ struct SearchView: View {
         NavigationStack {
             VStack(alignment: .leading) {
                 headerSection
+                
+                contentSection
             }
-
-            contentSection
-            
-            navigationAndSheets
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $isShowingFilterSheet) {
+                FilterSheetView(
+                    allCuisines: allCuisines,
+                    selectedCuisines: $selectedCuisines,
+                    showOnlyOpenStores: $showOnlyOpenStores
+                ) {
+                    isShowingFilterSheet = false
+                }
+            }
         }
     }
     
@@ -77,21 +86,6 @@ struct SearchView: View {
             }
             .padding()
         }
-    }
-    
-    private var navigationAndSheets: some View {
-        EmptyView()
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $isShowingFilterSheet) {
-                FilterSheetView(
-                    allCuisines: allCuisines,
-                    selectedCuisines: $selectedCuisines,
-                    showOnlyOpenStores: $showOnlyOpenStores
-                ) {
-                    isShowingFilterSheet = false
-                }
-            }
     }
 }
 
